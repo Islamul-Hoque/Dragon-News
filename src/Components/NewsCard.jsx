@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { FaEye, FaStar, FaRegBookmark, FaShareAlt } from "react-icons/fa";
+import { Link } from "react-router";
 
 const NewsCard = ({ news }) => {
-    const { title, rating, total_view, author, thumbnail_url,  details } = news;
-    const [expanded, setExpanded] = useState(false);
+    const { id, title, rating, total_view, author, thumbnail_url,  details } = news;
 
   // ⭐ 5-Star Rating
     const stars = Array.from({ length: 5 }, (_, index) => ( <FaStar key={index} className={index < rating.number ? "text-orange-400" : "text-gray-300"} /> ));
@@ -34,13 +34,14 @@ const NewsCard = ({ news }) => {
 
             {/* Body */}
             <div className="px-4">
-                <p className="text-accent text-[0.85rem] "> {expanded ? ( details ) 
-                : (
-                    <>
-                        {details.slice(0, 200)}...
-                        <span onClick={() => setExpanded(true)} className="text-[#ff8c47] font-semibold text-[0.95rem] cursor-pointer ml-1" >  Read More </span>
-                    </>
-                )}
+                <p className="text-accent text-[0.85rem] "> 
+                    { details.length > 200 ? (
+                        <> 
+                            {details.slice(0, 200)}...
+                            <Link to={`/news-details/${id}`}  className="text-[#ff8c47] font-semibold text-[0.95rem] cursor-pointer ml-1" >  Read More </Link>
+                        </>
+                        ) : ( details )
+                    }
                 </p>
             </div>
 
