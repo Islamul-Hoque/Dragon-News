@@ -16,7 +16,7 @@ const QZone = () => {
                 </div>
             </div>
             <div>
-                <img className='mt-5' src={BgImg} alt="" />
+                {/* <img className='mt-5' src={BgImg} alt="" /> */}
             </div>
         </>
     );
