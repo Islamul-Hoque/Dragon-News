@@ -5,7 +5,7 @@ import { AuthContext } from '../AuthProvider/AuthProvider';
 import { toast } from 'react-toastify';
 const Navbar = () => {
     const { user, signOutUser } = use(AuthContext)
-    // console.log(user);
+    console.log(user);
 
     const handleLogOut = ()=> {
         signOutUser()
@@ -18,7 +18,7 @@ const Navbar = () => {
     }
     return (
         <div className='grid grid-cols-2 md:grid-cols-3 justify-between items-center'>
-            <div className="hidden md:block"> { user && user.email } </div>
+            <div> {user && (user.email || user.providerData?.[0]?.email)} </div>
             <div className="flex gap-5 justify-center items-center text-accent ">
                 <NavLink to='/'>Home</NavLink>
                 <NavLink to='/about'>About</NavLink>
@@ -35,3 +35,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+// className="hidden md:block"

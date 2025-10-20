@@ -55,7 +55,13 @@ const AuthProvider = ( {children} ) => {
     useEffect(()=> {
         // set the observer 
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser)
+            if (currentUser) {
+            const email = currentUser.email || currentUser.providerData?.[0]?.email;
+                setUser({ ...currentUser, email });
+            } else {
+                setUser(null);
+            }
+            console.log(currentUser);
             setLoading(false)
         })
         // Clear the observer on unmount

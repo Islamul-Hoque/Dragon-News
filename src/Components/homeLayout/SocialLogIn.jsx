@@ -24,6 +24,7 @@ const SocialLogIn = () => {
     const handleGithubSignIn = () => {
         GitHubSignIn()
             .then(result => {
+                setUser(result.user)
                 navigate('/')
                 toast.success('Github log in successful');
             })
