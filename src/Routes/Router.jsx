@@ -11,12 +11,12 @@ import Register from '../Pages/Register';
 import AuthLayout from '../Layouts/AuthLayout';
 import NewsDetails from '../Pages/NewsDetails';
 import PrivateRoute from '../AuthProvider/PrivateRoute';
+import Loading from '../Pages/Loading';
 
 
 const router = createBrowserRouter([
     {
         path: "/",
-        // HydrateFallback: <p>Loading</p>,
         Component: HomeLayout,
         children: [
             {
@@ -26,7 +26,8 @@ const router = createBrowserRouter([
             {
                 path: '/category/:id',
                 Component: CategoryNews,
-                loader: ()=> fetch('/news.json')
+                loader: ()=> fetch('/news.json'),
+                hydrateFallbackElement: <Loading></Loading>
             },
         ]
     },
@@ -46,8 +47,9 @@ const router = createBrowserRouter([
     },
     {
         path: 'news-details/:id',
+        element: <PrivateRoute> <NewsDetails/> </PrivateRoute>,
         loader: ()=> fetch('/news.json'),
-        element: <PrivateRoute> <NewsDetails/> </PrivateRoute>
+        hydrateFallbackElement: <Loading></Loading>
     },
 ]);
 

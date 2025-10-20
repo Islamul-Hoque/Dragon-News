@@ -1,38 +1,77 @@
 import React, { use, useState } from 'react';
-import { Link, Links } from 'react-router';
+import { Link, Links, useNavigate } from 'react-router';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { FaEye } from 'react-icons/fa';
 import { IoEyeOff } from 'react-icons/io5';
 import { toast } from 'react-toastify';
+import { User } from 'lucide-react';
+import { sendEmailVerification } from 'firebase/auth';
 
 
 const Register = () => {
-    const { createUser, setUser } = use(AuthContext)
+    const { createUser, setUser,updateUser } = use(AuthContext)
     const [show, setShow] =useState(false)
     const [nameError, setNameError] = useState('')
+    const [error, setError] = useState('')
+    const navigate = useNavigate()
 
     const handleRegister = e => {
         e.preventDefault()
-        const name = e.target.name.value
-        const photo = e.target.photo.value
+        setError('')
+        const displayName = e.target.name.value
+        const photoURL = e.target.photo.value
         const email = e.target.email.value
         const password = e.target.password.value
+        const terms = e.target.terms.checked
 
-        if(name.length < 5){
-            return setNameError('Name should be more then 5 character')
-        } else{
-            setNameError('')
+        if (displayName.trim().length < 5) {
+            return setNameError('Name must be at least 5 characters long.');
+        } else {
+            setNameError('');
         }
 
-        createUser( name, photo, email, password)
-        .then(result => {
-            setUser(result.user);
-            toast.success('Register successful');
-        })
-        .catch(error => {
-            toast.error(error.code);
-            console.log(error.message);
-        })
+        // Check email, password, Error 
+        if (!email) {
+            return setError('Please enter your email address.');
+        } 
+        if (!password) {
+            return setError('Please enter your password.');
+        }
+        if(!terms){
+            return setError('Please accept our term and condition')
+        }
+
+
+        createUser( email, password)
+            .then(result => {
+                const user = result.user
+                sendEmailVerification(result.user)
+                    .then(()=> {
+                        toast.info('Verification email sent! Please verify before logging in.')
+                        navigate('/')
+                    })
+
+                updateUser({displayName, photoURL})
+                    .then(()=> {
+                        setUser({...user ,displayName, photoURL});
+                        navigate('/')
+                    })
+                    .catch(error => {
+                        toast.error(error.message)
+                        setUser(user)
+                    })
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    setError('This email is already registered!');
+                } 
+                else if (error.code === 'auth/weak-password') {
+                    setError('Password should be at least 6 characters.');
+                } 
+                else {
+                    setError('Something went wrong. Please try again later.');
+                }
+            });
     }
 
     return (
@@ -52,7 +91,7 @@ const Register = () => {
 
                                 {/* Photo URL */}
                                 <label className="label">Photo URL</label>
-                                <input name='photo' type="text" className="input w-full" placeholder="Enter your password" />
+                                <input name='photo' type="text" className="input w-full" placeholder="Enter your photo URL" />
 
                                 {/* Email */}
                                 <label className="label">Email</label>
@@ -65,11 +104,12 @@ const Register = () => {
                                     <span onClick={()=> setShow(!show) } className='absolute text-[1rem] right-[1rem] top-[2rem] cursor-pointer z-50 '> { show ? <FaEye/> : <IoEyeOff/> } </span>
                                 </div>
 
-                                <label className="label mt-2 flex items-center"> <input type="checkbox" className="checkbox text-gray-500" /> Accept <span className='font-semibold'>Term & Conditions</span> </label>
+                                <label className="label mt-2 flex items-center"> <input name="terms" type="checkbox" className="checkbox text-gray-500" /> Accept our <span className='font-semibold'>Term & Conditions</span> </label>
 
                                 <button type='submit' className="btn btn-primary mt-4">Register</button>
                             </fieldset>
                         </form>
+                        <p className='text-red-500 text-[0.8rem]'> {error} </p>
                         <p className='text-gray-500 text-center'>Already have an account? Please  <Link to='/auth/login'className='text-orange-400 hover:text-orange-500 hover:link font-semibold'>Log-in</Link>  </p>
                     </div>
                 </div>

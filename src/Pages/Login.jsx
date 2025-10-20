@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react';
+import React, { use, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate,  } from 'react-router';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { FaEye } from 'react-icons/fa';
@@ -6,27 +6,67 @@ import { IoEyeOff } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 
 const Login = () => {
-    const { signInUser } = use(AuthContext)
+    const { signInUser, ForgotPassword } = use(AuthContext)
     const [show, setShow] = useState(false)
     const [error, setError] = useState('')
+    const emailRef = useRef()
 
     const location = useLocation()
     const navigate = useNavigate()
 
     const handleLogin = e => {
         e.preventDefault()
+        setError('');
         const email = e.target.email.value
         const password = e.target.password.value
-        // console.log( {email, password});
+
+        // Check email & password
+        if (!email) {
+            return setError('Please enter your email address.');
+        } 
+        if (!password) {
+            return setError('Please enter your password.');
+        }
 
         signInUser(email, password)
             .then(result => {
-                console.log(result.user);
+                setError('')
                 toast.success('Sign in successful')
                 navigate(location.state || '/')
             })
             .catch(error => {
-                setError(error.code);
+                if (error.code === 'auth/invalid-credential') {
+                    setError('Email or password did not match! Please try again.');
+                } 
+                else if (error.code === 'auth/invalid-email') {
+                    setError('Please enter a valid email address.');
+                }
+                else if (error.code === 'auth/user-not-found') {
+                    setError('No account found with this email.');
+                }
+                else {
+                    setError('Something went wrong. Please try again later.');
+                }
+            });
+    }
+
+    const handleForgotPassword = () => {
+        const email = emailRef.current.value
+        if (!email) {
+            return setError('Please enter your email to reset password.')
+        }
+        ForgotPassword(email)
+        .then(()=> {
+            toast.success('Password reset email sent! Please check your inbox.')
+        })
+            .catch(error => {
+                if (error.code === 'auth/invalid-email') {
+                    setError('Please enter a valid email address.')
+                } else if (error.code === 'auth/user-not-found') {
+                    setError('No account found with this email.')
+                } else {
+                    setError('Something went wrong. Please try again later.')
+                }
             })
     }
 
@@ -40,15 +80,17 @@ const Login = () => {
                     <form onSubmit={ handleLogin }>
                         <fieldset className="fieldset">
                             <label className="label">Email address</label>
-                            <input name='email' type="email" className="input w-full" placeholder="Enter your email address" required/>
+                            <input onChange={() => setError('')} ref={emailRef} name='email' type="email" className="input w-full" placeholder="Enter your email address" />
 
                             <div className='relative'>
                                 <label className="label">Password</label>
-                                <input name='password' type={ show ? "text" : "password" } className="input w-full" placeholder="Enter your password" required/>
+                                <input onChange={() => setError('')} name='password' type={ show ? "text" : "password" } className="input w-full" placeholder="Enter your password" />
                                 <span onClick={()=> setShow(!show) } className='absolute text-[1rem] right-[1rem] top-[2rem] cursor-pointer z-50 '> { show ? <FaEye/> : <IoEyeOff/> } </span>
                             </div>
-                            
+
                             { error && <p className='text-red-500 text-[0.8rem]'> {error} </p> }
+
+                            <div onClick={handleForgotPassword} ><a className="link link-hover">Forgot password?</a></div>
                             <button type='submit' className="btn btn-primary text-white mt-4">Login</button>
                         </fieldset>
                     </form>
