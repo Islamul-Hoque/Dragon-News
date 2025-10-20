@@ -7,7 +7,7 @@ const NewsDetailsCard = ({news}) => {
 
     return (
         <div className="p-6 bg-white rounded-[0.6rem] border-1 border-base-200 overflow-hidden shadow ">
-            <img className="w-full h-[25rem] object-cover rounded-[0.5rem] " src={thumbnail_url} alt={title} />
+            <img className="w-full  md:h-[25rem] object-cover rounded-[0.5rem] " src={thumbnail_url} alt={title} />
 
             <div>
                 <h2 className="text-[1.1rem] text-primary font-semibold py-4">{title}</h2>

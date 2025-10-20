@@ -17,12 +17,12 @@ const NewsDetails = () => {
     return (
         <div>
             <header> <Header/> </header>
-            <main className='w-11/12 mx-auto grid grid-cols-12 gap-4 my-4  '>
-                <section className='col-span-9'>
+            <main className='w-11/12 mx-auto grid md:grid-cols-12 gap-4 my-4  '>
+                <section className='md:col-span-9'>
                     <h2 className='font-bold text-primary mb-4 text-[1.3rem] '>Dragon News</h2>
                     <NewsDetailsCard news={news} />
                 </section>
-                <aside className='col-span-3'> <RightAside /> </aside>
+                <aside className='md:col-span-3'> <RightAside /> </aside>
             </main>
         </div>
     );

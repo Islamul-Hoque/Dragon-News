@@ -17,8 +17,8 @@ const Navbar = () => {
             });
     }
     return (
-        <div className='grid grid-cols-3 justify-between items-center'>
-            <div className=""> { user && user.email } </div>
+        <div className='grid grid-cols-2 md:grid-cols-3 justify-between items-center'>
+            <div className="hidden md:block"> { user && user.email } </div>
             <div className="flex gap-5 justify-center items-center text-accent ">
                 <NavLink to='/'>Home</NavLink>
                 <NavLink to='/about'>About</NavLink>

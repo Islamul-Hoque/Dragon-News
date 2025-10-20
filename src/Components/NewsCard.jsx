@@ -29,7 +29,7 @@ const NewsCard = ({ news }) => {
             {/* Thumbnail */}
             <div className="p-4">
                 <h2 className="text-[1.1rem] text-primary font-semibold">{title}</h2>
-                <div className="mt-4"> <img className="w-full h-64 object-cover rounded-[0.5rem] " src={thumbnail_url} alt={title} /> </div>
+                <div className="mt-4"> <img className="w-full md:h-64 object-cover rounded-[0.5rem] " src={thumbnail_url} alt={title} /> </div>
             </div>
 
             {/* Body */}
