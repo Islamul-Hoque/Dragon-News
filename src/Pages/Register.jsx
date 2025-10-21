@@ -11,9 +11,10 @@ import { sendEmailVerification } from 'firebase/auth';
 const Register = () => {
     const { createUser, setUser,updateUser } = useContext(AuthContext)
     const [show, setShow] =useState(false)
-    const [nameError, setNameError] = useState('')
-    const [error, setError] = useState('')
     const navigate = useNavigate()
+
+    const [error, setError] = useState('')
+    const [nameError, setNameError] = useState('')
 
     const handleRegister = e => {
         e.preventDefault()
@@ -41,6 +42,23 @@ const Register = () => {
             return setError('Please accept our term and condition')
         }
 
+        // 🔹 Password detailed validation
+        let passwordError = "";
+        if (password.length < 8) {
+            passwordError = "Password must be at least 8 characters long";
+        } else if (!/[A-Z]/.test(password)) {
+            passwordError = "Password must include at least one uppercase letter";
+        } else if (!/[a-z]/.test(password)) {
+            passwordError = "Password must include at least one lowercase letter";
+        } else if (!/\d/.test(password)) {
+            passwordError = "Password must include at least one number";
+        } else if (!/[!@#$%^&*()_\-+=~`{}\[\]|:;"'<>,.?\/]/.test(password)) {
+            passwordError = "Password must include at least one special character (!@#$%^&*()_-+=~`{}[]|:;\"'<>,.?/)";
+        }
+
+        if (passwordError) {
+            return setError(passwordError);
+        }
 
         createUser( email, password)
             .then(result => {
@@ -100,7 +118,7 @@ const Register = () => {
                                 {/* Password */}
                                 <div className='relative'>
                                     <label className="label">Password</label>
-                                    <input name='password' type={ show ? "text" : "password" } className="input w-full" placeholder="Enter your password" required/>
+                                    <input name='password' type={ show ? "text" : "password" } className="input w-full" placeholder="Enter your password" />
                                     <span onClick={()=> setShow(!show) } className='absolute text-[1rem] right-[1rem] top-[2rem] cursor-pointer z-50 '> { show ? <FaEye/> : <IoEyeOff/> } </span>
                                 </div>
 
