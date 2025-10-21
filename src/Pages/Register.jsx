@@ -77,8 +77,8 @@ const Register = () => {
     return (
         <>
         <title>The Dragon News - Register</title>
-        <div className="hero -mt-15 min-h-screen">
-            <div className="w-[40%] rounded-[0.7rem] bg-white overflow-hidden shadow ">
+        <div className="flex justify-center items-center -pt-4 pb-10 min-h-screen">
+            <div className="w-[88%] md:w-[40%] rounded-[0.7rem] bg-white overflow-hidden shadow ">
                 <div>
                     <h1 className="text-3xl text-center pt-6 font-bold text-primary">Register your account</h1>
                     <div className="card-body">

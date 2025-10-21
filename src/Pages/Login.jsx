@@ -33,7 +33,7 @@ const Login = () => {
         signInUser(email, password)
             .then(result => {
                 setError('')
-                toast.success('Sign in successful')
+                // toast.success('Sign in successful')
                 navigate(location.state?.from || '/')
             })
             .catch(error => {
@@ -75,8 +75,8 @@ const Login = () => {
     return (
         <>
         <title>The Dragon News - Log in</title> 
-        <div className="hero -mt-15 bg-base-200 min-h-screen">
-            <div className="w-[40%] rounded-[0.7rem] bg-white overflow-hidden shadow">
+        <div className="flex justify-center items-center -mt-12 min-h-screen">
+            <div className="w-[88%] md:w-[40%] rounded-[0.7rem] bg-white overflow-hidden shadow">
                 <h1 className="text-3xl text-center pt-6 font-bold text-primary">Login your account</h1>
                 <div className="card-body">
                     <form onSubmit={ handleLogin }>
