@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react';
+import React, { use, useContext, useState } from 'react';
 import { Link, Links, useNavigate } from 'react-router';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { FaEye } from 'react-icons/fa';
@@ -9,7 +9,7 @@ import { sendEmailVerification } from 'firebase/auth';
 
 
 const Register = () => {
-    const { createUser, setUser,updateUser } = use(AuthContext)
+    const { createUser, setUser,updateUser } = useContext(AuthContext)
     const [show, setShow] =useState(false)
     const [nameError, setNameError] = useState('')
     const [error, setError] = useState('')

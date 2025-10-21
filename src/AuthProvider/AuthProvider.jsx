@@ -3,8 +3,9 @@ import { createUserWithEmailAndPassword, GithubAuthProvider, GoogleAuthProvider,
 import { auth } from '../firebase/firebase.config';
 export const AuthContext = createContext(null)
 
-const googleProvider = new GoogleAuthProvider()
 const GitHubProvider = new GithubAuthProvider()
+const googleProvider = new GoogleAuthProvider()
+googleProvider.addScope('email')  //Fix the problem...............
 
 const AuthProvider = ( {children} ) => {
     const [ user, setUser] = useState(null)

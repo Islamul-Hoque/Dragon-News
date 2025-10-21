@@ -1,4 +1,4 @@
-import React, { use, useRef, useState } from 'react';
+import React, { use, useContext, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate,  } from 'react-router';
 import { AuthContext } from '../AuthProvider/AuthProvider';
 import { FaEye } from 'react-icons/fa';
@@ -6,7 +6,7 @@ import { IoEyeOff } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 
 const Login = () => {
-    const { signInUser, ForgotPassword } = use(AuthContext)
+    const { signInUser, ForgotPassword } = useContext(AuthContext)
     const [show, setShow] = useState(false)
     const [error, setError] = useState('')
     const emailRef = useRef()
@@ -34,7 +34,7 @@ const Login = () => {
             .then(result => {
                 setError('')
                 toast.success('Sign in successful')
-                navigate(location.state || '/')
+                navigate(location.state?.from || '/')
             })
             .catch(error => {
                 if (error.code === 'auth/invalid-credential') {
@@ -58,9 +58,9 @@ const Login = () => {
             return setError('Please enter your email to reset password.')
         }
         ForgotPassword(email)
-        .then(()=> {
-            toast.success('Password reset email sent! Please check your inbox.')
-        })
+            .then(()=> {
+                toast.success('Password reset email sent! Please check your inbox.')
+            })
             .catch(error => {
                 if (error.code === 'auth/invalid-email') {
                     setError('Please enter a valid email address.')
@@ -82,11 +82,11 @@ const Login = () => {
                     <form onSubmit={ handleLogin }>
                         <fieldset className="fieldset">
                             <label className="label">Email address</label>
-                            <input onChange={() => setError('')} ref={emailRef} name='email' type="email" className="input w-full" placeholder="Enter your email address" />
+                            <input ref={emailRef} name='email' type="email" className="input w-full" placeholder="Enter your email address" />
 
                             <div className='relative'>
                                 <label className="label">Password</label>
-                                <input onChange={() => setError('')} name='password' type={ show ? "text" : "password" } className="input w-full" placeholder="Enter your password" />
+                                <input  name='password' type={ show ? "text" : "password" } className="input w-full" placeholder="Enter your password" />
                                 <span onClick={()=> setShow(!show) } className='absolute text-[1rem] right-[1rem] top-[2rem] cursor-pointer z-50 '> { show ? <FaEye/> : <IoEyeOff/> } </span>
                             </div>
 

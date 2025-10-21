@@ -1,4 +1,4 @@
-import React, { use } from 'react';
+import React, { use, useContext } from 'react';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
@@ -6,7 +6,7 @@ import {  useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 
 const SocialLogIn = () => {
-    const { user, setUser, googleSignIn, GitHubSignIn } = use(AuthContext)
+    const { user, setUser, googleSignIn, GitHubSignIn } = useContext(AuthContext)
     const navigate = useNavigate()
 
     const handleGoogleSignIn = () => {
